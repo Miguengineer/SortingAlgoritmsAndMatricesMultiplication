@@ -2,6 +2,29 @@
 #include <cstdlib>
 #include <iostream>
 using namespace std;
+
+
+void swap(int *a, int *b){
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int partition(int *A, int p, int r){
+    int x = A[r];
+    int i = p - 1;
+    for (int j = p; j < r ; j++){
+        if (A[j] <= x){
+            i++;
+            swap(&A[i], &A[j]);
+        }
+    }
+    swap(&A[i+1], &A[r]);
+    return (i + 1);
+}
+
+
+
 /**
  * Merge auxiliary function that merges two subarrays that are already ordered. The subarray are in A[p..r]. Values
  * must be less than the maximum int allowed, since that number is used as +oo (sentinel)
@@ -50,11 +73,7 @@ void merge(int *A, int p, int q, int r){
 }
 
 
-void swap(int *a, int *b){
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
+
 /**
  * Implementation of insertion sort algorithm. Receives and array to be sorted, sorts and returns nothing
  * @param array: array to be sorted
@@ -131,6 +150,17 @@ void merge_sort(int* A, int p, int r){
     }
 }
 
-void quicksort(int* A, int n){
-
+/**
+ * Implements Quick Sort algoritm based on subroutine partition. Algorithm may very depending on different partitions
+ * subroutines.
+ * @param A: Array to be sorted
+ * @param p: Initial value when called MUST be 0
+ * @param r: Final value of the array. Initial value when called MUST BE the length of the array
+ */
+void quick_sort(int *A, int p, int r){
+    if (p < r) {
+        int q = partition(A, p, r);
+        quick_sort(A, p, q-1);
+        quick_sort(A, q + 1, r);
+    }
 }

@@ -41,5 +41,17 @@ int main() {
     for (int i = 0; i < 10; i++){
         cout << testData4[i] << " ";
     }
+    printf("Testing quicksort.... \n");
+    int testData5[] = {10, 9, 8, 7, 6, 5, 5, 5, 2, 1};
+    quick_sort(testData5, 0, 9);
+    for (int i = 0; i < 10; i++){
+        cout << testData5[i] << " ";
+    }
+
+
+
     return 0;
+
+
+
 }
