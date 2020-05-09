@@ -9,7 +9,7 @@
  */
 using namespace std;
 
-void Initialise(double **res, int rows, int cols)
+void Initialise(int **res, int rows, int cols)
 {
     for (int i = 0; i < rows; i++)
     {
@@ -21,34 +21,34 @@ void Initialise(double **res, int rows, int cols)
 }
 
 int main() {
-    int aRows = 10;
-    int aCols = 5;
-    int bRows = 5;
-    int bCols = 6;
+    int aRows = 3;
+    int aCols = 2;
+    int bRows = 2;
+    int bCols = 4;
     // Array of pointers
-    double** A = new double*[aRows];
+    int** A = new int*[aRows];
     for (int i = 0; i < aRows; i++)
     {
-        A[i] = new double[aCols];
+        A[i] = new int[aCols];
     }
 
-    double** B = new double*[bRows];
+    int** B = new int*[bRows];
     for (int i = 0; i < bRows; i++)
     {
-        B[i] = new double[bCols];
+        B[i] = new int[bCols];
     }
 
     Initialise(A, aRows, aCols);
     Initialise(B, bRows, bCols);
 
-    double** C;
-    C = new double*[aRows];
+    int** C;
+    C = new int*[aRows];
     for (int i = 0; i < aRows; i++)
     {
-        C[i] = new double [bCols];
+        C[i] = new int [bCols];
     }
 
-    regular_multiplication(C,A,B,aRows,aCols,bRows,bCols);
+    mult_with_space_locality(C,A,B,aRows,aCols,bRows,bCols);
 
     for (int i = 0; i < aRows; i++)
     {

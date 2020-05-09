@@ -8,7 +8,7 @@
  * @param B_rows: Num of rows of B
  * @param B_cols: Num of cols of B
  */
-void regular_multiplication(double **C, double **A, double **B, int A_rows, int A_cols, int B_rows, int B_cols)
+void regular_multiplication(int **C, int **A, int **B, int A_rows, int A_cols, int B_rows, int B_cols)
 {
     // If columns of A are different of rows of B, matrix multiplication can't be done, return
     if (A_cols != B_rows)
@@ -23,6 +23,43 @@ void regular_multiplication(double **C, double **A, double **B, int A_rows, int 
             {
                 // Accum partial multiplications
                 C[i][j] += A[i][k]*B[k][j];
+            }
+        }
+    }
+}
+
+
+
+void mult_with_space_locality(int **C, int **A, int **B, int A_rows, int A_cols, int B_rows, int B_cols)
+{
+    // If columns of A are different of rows of B, matrix multiplication can't be done, return
+    if (A_cols != B_rows)
+        return;
+
+    // Create temp matrix to hold transpose of B
+    int **B_transpose = new int *[B_cols];
+
+    for (int i = 0; i < B_cols; i++)
+    {
+        B_transpose[i] = new int[B_rows];
+    }
+    // Compute transpose of B
+    for(int i = 0; i < B_rows; i++){
+        for(int j = 0; j < B_cols; j++){
+            B_transpose[j][i] = B[i][j];
+        }
+    }
+    // Multiply taking advantage of how data is actually stored in memory
+    for (int i = 0; i < A_rows; i++)
+    {
+        for (int j = 0; j < B_cols; j++)
+        {
+            // Reset sum in case C isn't initialised to 0
+            C[i][j] = 0;
+            for (int k = 0; k < A_cols; k++)
+            {
+                // Accum partial multiplications
+                C[i][j] += A[i][k]*B_transpose[j][k];
             }
         }
     }
