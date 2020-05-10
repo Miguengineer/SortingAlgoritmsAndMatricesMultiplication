@@ -2,6 +2,7 @@
 #include <valarray>
 #include "sorting_algorithms.h"
 #include "matrices_mult.h"
+#include "utils.h"
 /*
  * Documentation...
  * ...
@@ -21,6 +22,7 @@ void Initialise(int **res, int rows, int cols)
 }
 
 int main() {
+    /*
     int aRows = 3;
     int aCols = 2;
     int bRows = 2;
@@ -58,6 +60,8 @@ int main() {
         }
         std::cout << '\n';
     }
+    */
+    test_insertionsort();
 
     return 0;
 
