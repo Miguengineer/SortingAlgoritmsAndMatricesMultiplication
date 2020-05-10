@@ -61,7 +61,7 @@ int main() {
         std::cout << '\n';
     }
     */
-    test_insertionsort();
+    test_std_sort();
 
     return 0;
 
