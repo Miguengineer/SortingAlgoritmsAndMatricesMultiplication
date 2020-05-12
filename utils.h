@@ -11,3 +11,4 @@ void test_quicksort();
 void test_bubblesort();
 void test_selectionsort();
 void test_std_sort();
+void run_test_matrix();

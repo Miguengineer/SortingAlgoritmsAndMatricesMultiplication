@@ -4,6 +4,7 @@
 #include <chrono>
 #include <algorithm>
 #include "sorting_algorithms.h"
+#include "matrices_mult.h"
 
 using namespace std;
 int ARRAY_SIZES[3] = {1000, 100000};
@@ -11,7 +12,26 @@ int ARRAY_SIZES[3] = {1000, 100000};
 int *array_size1000 = new int[1000];
 int *array_size100000 = new int[100000];
 
+/**
+ * Initialize matrix to some value, in this case just i + j
+ * @param C: where to store result matrix
+ * @param rows: Rows of C
+ * @param cols: Columns of C
+ */
+void initialize_matrix(int **C, int rows, int cols)
+{
+    for (int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < cols; j++)
+        {
+            C[i][j] = i + j;
+        }
+    }
+}
 
+/**
+ * Load data from disk
+ */
 void load_data_unordered_with_repetition(){
     // Declare input file stream
     ifstream inFile;
@@ -42,7 +62,9 @@ void load_data_unordered_with_repetition(){
         inFile.close();
     }
 }
-
+/**
+ * Load data from disk
+ */
 void load_data_unordered_without_repetition(){
     // Declare input file stream
     ifstream inFile;
@@ -73,7 +95,9 @@ void load_data_unordered_without_repetition(){
         inFile.close();
     }
 }
-
+/**
+ * Load data from disk
+ */
 void load_data_unordered_reverse(){
     // Declare input file stream
     ifstream inFile;
@@ -104,7 +128,9 @@ void load_data_unordered_reverse(){
         inFile.close();
     }
 }
-
+/**
+ * Load data from disk
+ */
 void load_data_partially_ordered(){
     // Declare input file stream
     ifstream inFile;
@@ -136,7 +162,10 @@ void load_data_partially_ordered(){
     }
 }
 
-
+/**
+ * This function test merge sort (measuring time) with different arrays of characteristics and different
+ * sizes. Test is performed several times for each dataset
+ */
 void test_mergesort(){
     cout << "****************Testing MergeSort Algorithm ****************" << endl;
     cout << "****************Testing Unordered lists with repetition****************" << endl;
@@ -227,7 +256,10 @@ void test_mergesort(){
     std::cout << std::fixed <<elapsed.count();
     cout << " seconds" << endl;
 }
-
+/**
+ * This function tests insertion sort (measuring time) with different arrays of characteristics and different
+ * sizes. Test is performed several times for each dataset
+ */
 void test_insertionsort(){
     cout << "****************Testing Unordered lists with repetition****************" << endl;
     load_data_unordered_with_repetition();
@@ -317,7 +349,10 @@ void test_insertionsort(){
     std::cout << std::fixed <<elapsed.count();
     cout << " seconds" << endl;
 }
-
+/**
+ * This function tests quick sort (measuring time) with different arrays of characteristics and different
+ * sizes. Test is performed several times for each dataset
+ */
 void test_quicksort(){
     cout << "****************Testing QuickSort Algorithm ****************" << endl;
     cout << "****************Testing Unordered lists with repetition****************" << endl;
@@ -408,7 +443,10 @@ void test_quicksort(){
     std::cout << std::fixed <<elapsed.count();
     cout << " seconds" << endl;
 }
-
+/**
+ * This function tests bubble sort (measuring time) with different arrays of characteristics and different
+ * sizes. Test is performed several times for each dataset
+ */
 void test_bubblesort(){
     cout << "****************Testing Bubblesort Algorithm ****************" << endl;
     cout << "****************Testing Unordered lists with repetition****************" << endl;
@@ -499,7 +537,10 @@ void test_bubblesort(){
     std::cout << std::fixed <<elapsed.count();
     cout << " seconds" << endl;
 }
-
+/**
+ * This function tests selection sort (measuring time) with different arrays of characteristics and different
+ * sizes. Test is performed several times for each dataset
+ */
 void test_selectionsort(){
     cout << "****************Testing Unordered lists with repetition****************" << endl;
     load_data_unordered_with_repetition();
@@ -589,7 +630,10 @@ void test_selectionsort(){
     std::cout << std::fixed <<elapsed.count();
     cout << " seconds" << endl;
 }
-
+/**
+ * This function STD sort (measuring time) with different arrays of characteristics and different
+ * sizes. Test is performed several times for each dataset
+ */
 void test_std_sort(){
     cout << "****************Testing Unordered lists with repetition****************" << endl;
     load_data_unordered_with_repetition();
@@ -680,6 +724,205 @@ void test_std_sort(){
     cout << " seconds" << endl;
 }
 
+/**
+ * This function test matrices multiplication algorithm, measuring its execution time. Matrices to be tested
+ * are just matrices initialized with initialize_matrix.
+ */
 void run_test_matrix(){
-
+    cout << "Matrices Test Started" << endl;
+    cout << "**************Testing regular matrices multiplication**************" << endl;
+    cout << "Testing A[100][100]*B[100][100]" << endl;
+    // Initialize number of rows and columns to be tested. Start with square matrices
+    int A_rows = 100;
+    int A_cols = 100;
+    int B_rows = 100;
+    int B_cols = 100;
+    // Array of pointers
+    int** A = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        A[i] = new int[A_cols];
+    }
+    int** B = new int*[B_rows];
+    for (int i = 0; i < B_rows; i++)
+    {
+        B[i] = new int[B_cols];
+    }
+    initialize_matrix(A, A_rows, A_cols);
+    initialize_matrix(B, B_rows, B_cols);
+    int** C;
+    C = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        C[i] = new int [B_cols];
+    }
+    auto start = std::chrono::system_clock::now();
+    regular_multiplication(C, A, B, A_rows, A_cols, B_rows, B_cols);
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout.precision(7);
+    cout << "The multiplication took: ";
+    std::cout << std::fixed <<elapsed.count();
+    cout << " seconds" << endl;
+    // Testing 1000x1000 size
+    cout << "Testing A[1000][1000]*B[1000][1000]" << endl;
+    A_rows = 1000;
+    A_cols = 1000;
+    B_rows = 1000;
+    B_cols = 1000;
+    // Array of pointers
+    A = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        A[i] = new int[A_cols];
+    }
+    B = new int*[B_rows];
+    for (int i = 0; i < B_rows; i++)
+    {
+        B[i] = new int[B_cols];
+    }
+    initialize_matrix(A, A_rows, A_cols);
+    initialize_matrix(B, B_rows, B_cols);
+    C = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        C[i] = new int [B_cols];
+    }
+    start = std::chrono::system_clock::now();
+    regular_multiplication(C, A, B, A_rows, A_cols, B_rows, B_cols);
+    end = std::chrono::system_clock::now();
+     elapsed = end - start;
+    std::cout.precision(7);
+    cout << "The multiplication took: ";
+    std::cout << std::fixed <<elapsed.count();
+    cout << " seconds" << endl;
+    // Testing 1000x1000 size
+    cout << "Testing A[2000][500]*B[500][2000]" << endl;
+    A_rows = 2000;
+    A_cols = 500;
+    B_rows = 500;
+    B_cols = 2000;
+    // Array of pointers
+    A = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        A[i] = new int[A_cols];
+    }
+    B = new int*[B_rows];
+    for (int i = 0; i < B_rows; i++)
+    {
+        B[i] = new int[B_cols];
+    }
+    initialize_matrix(A, A_rows, A_cols);
+    initialize_matrix(B, B_rows, B_cols);
+    C = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        C[i] = new int [B_cols];
+    }
+    start = std::chrono::system_clock::now();
+    regular_multiplication(C, A, B, A_rows, A_cols, B_rows, B_cols);
+    end = std::chrono::system_clock::now();
+    elapsed = end - start;
+    std::cout.precision(7);
+    cout << "The multiplication took: ";
+    std::cout << std::fixed <<elapsed.count();
+    cout << " seconds" << endl;
+    cout << "**************Testing matrix multiplication with space locality **************" << endl;
+    cout << "Testing A[100][100]*B[100][100]" << endl;
+    // Initialize number of rows and columns to be tested. Start with square matrices
+    A_rows = 100;
+    A_cols = 100;
+    B_rows = 100;
+    B_cols = 100;
+    // Array of pointers
+    A = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        A[i] = new int[A_cols];
+    }
+    B = new int*[B_rows];
+    for (int i = 0; i < B_rows; i++)
+    {
+        B[i] = new int[B_cols];
+    }
+    initialize_matrix(A, A_rows, A_cols);
+    initialize_matrix(B, B_rows, B_cols);
+    C = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        C[i] = new int [B_cols];
+    }
+    start = std::chrono::system_clock::now();
+    mult_with_space_locality(C, A, B, A_rows, A_cols, B_rows, B_cols);
+    end = std::chrono::system_clock::now();
+    elapsed = end - start;
+    std::cout.precision(7);
+    cout << "The multiplication took: ";
+    std::cout << std::fixed <<elapsed.count();
+    cout << " seconds" << endl;
+    // Testing 1000x1000 size
+    cout << "Testing A[1000][1000]*B[1000][1000]" << endl;
+    A_rows = 1000;
+    A_cols = 1000;
+    B_rows = 1000;
+    B_cols = 1000;
+    // Array of pointers
+    A = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        A[i] = new int[A_cols];
+    }
+    B = new int*[B_rows];
+    for (int i = 0; i < B_rows; i++)
+    {
+        B[i] = new int[B_cols];
+    }
+    initialize_matrix(A, A_rows, A_cols);
+    initialize_matrix(B, B_rows, B_cols);
+    C = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        C[i] = new int [B_cols];
+    }
+    start = std::chrono::system_clock::now();
+    mult_with_space_locality(C, A, B, A_rows, A_cols, B_rows, B_cols);
+    end = std::chrono::system_clock::now();
+    elapsed = end - start;
+    std::cout.precision(7);
+    cout << "The multiplication took: ";
+    std::cout << std::fixed <<elapsed.count();
+    cout << " seconds" << endl;
+    // Testing 1000x1000 size
+    cout << "Testing A[2000][500]*B[500][2000]" << endl;
+    A_rows = 2000;
+    A_cols = 500;
+    B_rows = 500;
+    B_cols = 2000;
+    // Array of pointers
+    A = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        A[i] = new int[A_cols];
+    }
+    B = new int*[B_rows];
+    for (int i = 0; i < B_rows; i++)
+    {
+        B[i] = new int[B_cols];
+    }
+    initialize_matrix(A, A_rows, A_cols);
+    initialize_matrix(B, B_rows, B_cols);
+    C = new int*[A_rows];
+    for (int i = 0; i < A_rows; i++)
+    {
+        C[i] = new int [B_cols];
+    }
+    start = std::chrono::system_clock::now();
+    mult_with_space_locality(C, A, B, A_rows, A_cols, B_rows, B_cols);
+    end = std::chrono::system_clock::now();
+    elapsed = end - start;
+    std::cout.precision(7);
+    cout << "The multiplication took: ";
+    std::cout << std::fixed <<elapsed.count();
+    cout << " seconds" << endl;
 }
